@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="build/browser.min.js"></script>
+<style>
+</style>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/babel">
+var Box=React.createClass({
+	handleBox:function(){
+		var aCh=this.refs.box.children;
+		var oCh1=this.refs.ch1
+		for(var i=0;i<aCh.length;i++){
+			aCh[i].onclick=function(){
+				//查一查有多少个选中
+				var count = 0;//计数器
+				for(var i=0;i<aCh.length;i++){
+					if(aCh[i].checked==true){
+						count++;
+					}
+				}
+				if(count==aCh.length){
+					oCh1.checked=true;
+				}else{
+					oCh1.checked=false;
+				}
+			};
+		}
+	},
+	handleCh1:function(){
+		var oCh1=this.refs.ch1
+		var aCh = this.refs.box.children;
+		if(oCh1.checked==true){
+			for(var i=0;i<aCh.length;i++){
+				aCh[i].checked=true;
+			}
+		}else{
+			for(var i=0;i<aCh.length;i++){
+				aCh[i].checked=false;
+			}
+		}
+	},
+	render:function(){
+		return(
+			<div>
+				<span>全选</span><input type="checkbox" ref="ch1" onClick={this.handleCh1} />
+				<hr />
+				<div ref="box" onClick={this.handleBox}>
+					<input type="checkbox" />
+					<input type="checkbox" />
+					<input type="checkbox" />
+					<input type="checkbox" />
+					<input type="checkbox" />
+				</div>
+			</div>
+		);
+	}
+});
+ReactDOM.render(
+	<Box />,
+	document.getElementById('example')
+);
+</script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="build/browser.min.js"></script>
+<style>
+.on{
+	background: #ccc;
+}
+</style>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/babel">
+var Box=React.createClass({
+	countDown:function(obj){
+		
+			var count=this.state.count;
+			count--;
+			this.setState({
+				count:count,
+				canClick:false
+			});
+			if(count<0){
+				clearInterval(this.timer);
+				this.setState({
+					count:6,
+					canClick:true
+				})
+			}
+		
+	},
+	handleClick:function(e){
+		e.stopPropagation();
+		e.preventDefault();
+		var oBtn=e.target;
+		clearInterval(this.timer);
+		this.countDown(oBtn);
+		this.timer=setInterval(this.countDown.bind(this,oBtn),1000);
+		
+	},
+	getInitialState:function(){
+		return{
+		}
+	},
+	componentWillMount:function(){
+		this.setState({
+			count:6,
+			canClick:true
+		});
+	},
+	render:function(){
+		var BtnClassName=this.state.canClick?'':'on';
+		var mes=this.state.canClick?'获取验证码':this.state.count+'后重新获取验证码';
+		return(
+			<a href="javascript:;" className={BtnClassName} onClick={this.state.canClick?this.handleClick:null}>
+				{mes}
+			</a>
+		);
+	}
+});
+ReactDOM.render(
+	<Box />,
+	document.getElementById('example')
+);
+</script>
+</body>
+</html>

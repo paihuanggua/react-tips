@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="build/browser.min.js"></script>
+<style>
+</style>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/babel">
+var Box=React.createClass({
+	handleOk:function(){
+		var aCh = this.refs.box.children;
+		for(var i=0;i<aCh.length;i++){
+			aCh[i].checked=true;
+		}
+	},
+	handleNo:function(){
+		var aCh = this.refs.box.children;
+		for(var i=0;i<aCh.length;i++){
+			aCh[i].checked=false;
+		}
+	},
+	handelRev:function(){
+		var aCh = this.refs.box.children;
+		for(var i=0;i<aCh.length;i++){
+			if(aCh[i].checked==true){
+				aCh[i].checked=false;
+			}else{
+				aCh[i].checked=true;
+			}
+		}
+	},
+	render:function(){
+		return(
+			<div>
+				<input type="button" defaultValue="全选" ref="ok_btn" onClick={this.handleOk} />
+				<input type="button" defaultValue="不选" ref="no_btn" onClick={this.handleNo}/>
+				<input type="button" defaultValue="反选" ref="rev_btn" onClick={this.handelRev}/>
+				<hr />
+				<div ref="box">
+					<input type="checkbox" />
+				    <input type="checkbox" />
+				    <input type="checkbox" />
+				    <input type="checkbox" />
+				    <input type="checkbox" />
+				</div>
+			</div>
+		);
+	}
+});
+ReactDOM.render(
+	<Box />,
+	document.getElementById('example')
+);
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

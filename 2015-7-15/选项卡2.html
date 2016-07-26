@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="build/browser.min.js"></script>
+<style>
+*{margin:0; padding:0;}
+div input{background:#ccc;}
+div input.on{background:red;}
+.box{width:200px; height:200px; background:#ccc; display: none;}
+</style>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/babel">
+//这个看着是不是有点react的味道，在初始化的时候可以少传props的值。这里就不删了，以后看起来会有别的思路
+//es6的大家写写
+//数据是require进来的，不应该写在state里面。在循环的时候初始化state里的值
+
+var ControllerUnit=React.createClass({
+	handleClick:function(){
+		this.props.turn();
+	},
+	render:function(){
+		var	 controlelrUnitClassName='';
+		if(this.props.arrange.isOn){
+			controlelrUnitClassName='on';
+		}
+		return(
+			<input type="button" className={controlelrUnitClassName} value={this.props.arrange.value} onClick={this.handleClick} />
+		);
+	}
+});
+var OneDiv=React.createClass({
+	render:function(){
+		var styleObj={};
+		if(this.props.data.isBlock){
+			styleObj={
+				display:'block'
+			};
+		}
+		return(
+			<div className="box" style={styleObj}>
+				{this.props.data.boxValue}
+			</div>
+		);	
+	}
+});
+var Box=React.createClass({
+	getInitialState:function(){
+		return{
+			elementArr:[
+				{
+					value:'aaa',
+					isOn:true,
+					isBlock:true,
+					boxValue:'wowowo'
+				},
+				{
+					value:'bbb',
+					isOn:false,
+					isBlock:false,
+					boxValue:'yuyuyu'
+				},
+				{
+					value:'ccc',
+					isOn:false,
+					isBlock:false,
+					boxValue:'jiajiajia'
+				}
+			]
+		}
+	},
+	turn:function(index){
+		return function(){
+			var elementArr=this.state.elementArr;
+			for(var i=0;i<elementArr.length;i++){
+				elementArr[i].isOn=false;
+				elementArr[i].isBlock=false;
+			}
+			elementArr[index].isOn=true;
+			elementArr[index].isBlock=true;
+			this.setState({
+				elementArr:elementArr
+			});
+		}.bind(this);
+	},
+	render:function(){
+		var aBox=[];
+		var controllerUnits=[];
+		this.state.elementArr.forEach(function(value,index){
+			aBox.push(
+				<OneDiv
+			 		key={index}
+					data={value}
+				/>
+			);
+			controllerUnits.push(
+				<ControllerUnit
+					 key={index}
+					 data={value}
+					 ref={'ControllerUnit'+index}
+					 arrange={this.state.elementArr[index]}
+					 turn={this.turn(index)}
+				/>
+			);
+		}.bind(this))
+		return(
+			<div>
+				{controllerUnits}
+				{aBox}
+			</div>
+		);
+	}
+});
+
+ReactDOM.render(
+	<Box />,
+	document.getElementById('example')
+);
+</script>
+</body>
+</html>

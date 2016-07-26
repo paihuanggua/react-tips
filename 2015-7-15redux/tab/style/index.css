@@ -1,0 +1,4 @@
+*{margin:0; padding:0;}
+div input{background:#ccc;}
+div input.on{background:red;}
+.box{width:200px; height:200px; background:#ccc; display: none;}

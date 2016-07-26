@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="build/browser.min.js"></script>
+<style>
+*{margin:0; padding:0;}
+.div1{width:100px;height:100px; background:#f33; position:absolute; left:300px; top:100px;}
+.div2{width:200px; height:200px; background:#399; position:absolute; left:410px; top:100px;}
+</style>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/babel">
+//程序有很多写法，实现效果的方法很多
+//主要是自己想怎么写，别人能更好的接受
+var Box=React.createClass({
+	leftmouseover:function(){
+		clearTimeout(this.timer);
+		this.timer=setTimeout(function(){
+			this.setState({
+				isBlock:true
+			});
+		}.bind(this),300);
+	},
+	leftmouseout:function(){
+		clearTimeout(this.timer);
+		this.timer=setTimeout(function(){
+			this.setState({
+				isBlock:false
+			});
+		}.bind(this),300);
+	},
+	getInitialState:function(){
+		return{
+			isBlock:false
+		}
+	},
+	render:function(){
+		var NoneOrBlock=this.state.isBlock?'block':'none';
+		var rightBox={
+			display:NoneOrBlock
+		};
+		return(
+			<div>
+				<div 
+					className="div1"
+					ref="div1"
+					onMouseOver={this.leftmouseover}
+					onMouseOut={this.leftmouseout}
+				></div>
+				<div className="div2"
+					ref="div2"
+					style={rightBox}
+					onMouseOver={this.leftmouseover}
+					onMouseOut={this.leftmouseout}
+				></div>
+			</div>
+		);
+	}
+});
+ReactDOM.render(
+	<Box />,
+	document.getElementById('example')
+);
+</script>
+</body>
+</html>

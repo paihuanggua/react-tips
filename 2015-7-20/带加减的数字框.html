@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="build/browser.min.js"></script>
+<style>
+</style>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/babel">
+var Box=React.createClass({
+	getInitialState:function(){
+		return{
+			num:0
+		}
+	},
+	handleAdd:function(){
+		var num=this.state.num;
+		num++;
+		this.setState({
+			num:num
+		});
+	},
+	handleReduce:function(){
+		var num=this.state.num;
+		num--;
+		this.setState({
+			num:num
+		});
+	},
+	render:function(){
+	console.log(1);
+		return(
+			<div>
+				<input type="button" defaultValue="-" onClick={this.handleReduce} />
+				<input type="text" value={this.state.num} />
+				<input type="button" defaultValue="+" onClick={this.handleAdd} />
+			</div>
+		);
+	}
+});
+ReactDOM.render(
+	<Box />,
+	document.getElementById('example')
+);
+</script>
+</body>
+</html>

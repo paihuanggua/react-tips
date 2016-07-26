@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="build/browser.min.js"></script>
+<style>
+img{width:800px; display:none;}
+</style>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/babel">
+//面向对象可以在componentDidMount对DOM元素操作
+//可以直接给img元素直接加onMouseOver和onMouseOut事件方法做这个例子
+//主要根据个人的爱好吧
+var Box=React.createClass({
+	adHide:function(){
+		this.timer=setTimeout(function(){
+			this.oAd.style.display="none";
+		}.bind(this),3000);
+	},
+	componentDidMount:function(){
+		this.oAd=this.refs.ad;
+		this.timer=setTimeout(function(){
+			this.oAd.style.display="block";
+			this.adHide();
+		}.bind(this),3000);
+		this.oAd.onmouseover=function(){
+			clearTimeout(this.timer);
+		}.bind(this);
+		this.oAd.onmouseout=function(){
+			this.adHide();
+		}.bind(this);
+	},
+	render:function(){
+		return(
+			<img src="ad.jpg" ref="ad" />
+		);
+	}
+});
+ReactDOM.render(
+	<Box />,
+	document.getElementById('example')
+);
+</script>
+</body>
+</html>

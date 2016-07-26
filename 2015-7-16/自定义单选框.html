@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="build/browser.min.js"></script>
+<style>
+*{margin:0; padding:0;}
+li span{background:url(no.gif) no-repeat; padding-left:16px;}
+.on span{background:url(yes.gif) no-repeat;}
+</style>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/babel">
+
+//当然在componentDivMount里操作是没什么问题的
+//根据VCD原则，classNameArr的数据不应该在getInitialState设置，应该require进来数据。说明一下
+
+var LiOne=React.createClass({
+	handleClick:function(){
+		this.props.isOn();
+	},
+	render:function(){
+		return(
+			<li className={this.props.name} onClick={this.handleClick}>{this.props.value}</li>
+		);
+	}
+});
+var Span=React.createClass({
+	getInitialState:function(){
+		return{
+			classNameArr:[
+				false,false
+			]
+		}
+	},
+	handleClick:function(index){
+		return function(){
+			var classNameArr=this.state.classNameArr;
+			console.log(classNameArr);
+			for(var i=0;i<classNameArr.length;i++){
+				classNameArr[i]=false;
+			}
+			classNameArr[index]=true;
+			this.setState({
+				classNameArr:classNameArr
+			});
+		}.bind(this);
+	},
+	render:function(){
+
+		return(
+			<ul>
+				{this.props.children.map(function(child,index){
+					var OneclassName='';
+					if(this.state.classNameArr[index]){
+						OneclassName='on';
+					}else{
+						OneclassName='';
+					}
+					return <LiOne 
+								key={index}
+								name={OneclassName}
+								value={child}
+								isOn={this.handleClick(index)}
+							/>
+
+				}.bind(this))}
+			</ul>
+		);
+	}
+});
+ReactDOM.render(
+	<Span>
+		<span>男</span>
+		<span>女</span>
+	</Span>,
+	document.getElementById('example')
+);
+</script>
+</body>
+</html>

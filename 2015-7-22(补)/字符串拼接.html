@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="build/browser.min.js"></script>
+<style>
+</style>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/babel">
+var Box=React.createClass({
+	handleChange:function(e){
+		e.stopPropagation();
+		e.preventDefault();
+		alert(e.target.value);
+		this.setState({
+			value:e.target.value
+		});
+	},
+	getInitialState:function(){
+		return{}
+	},
+	componentWillMount:function(){
+		this.setState({			
+			value:1
+		});
+	},
+	render:function(){
+		console.log(this.state.value);
+		return(
+			<div>
+				<div className="box">
+					<img src={'img/'+this.state.value+'.png'} width="350" height="300" alt="" />
+					<p>image{this.state.value}</p>
+				</div>
+				<select name="" id="" onChange={this.handleChange}>
+					<option value="1">img1</option>
+					<option value="2">img2</option>
+					<option value="3">img3</option>
+				</select>
+			</div>
+		);
+	}
+});
+ReactDOM.render(
+	<Box />,
+	document.getElementById('example')
+);
+</script>
+</body>
+</html>

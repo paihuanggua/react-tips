@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="build/browser.min.js"></script>
+<style>
+*{margin:0; padding:0;}
+.box{width:200px; height:200px; border:1px solid #000;}
+</style>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/babel">
+var Box=React.createClass({
+	handleClick:function(e){
+		e.stopPropagation();
+		e.preventDefault();
+		this.refs.box.style[this.refs.goodSelect.value]=this.refs.otext.value;
+	},
+	render:function(){
+		return(
+			<div>
+				<select ref="goodSelect">
+					<option value="width">width</option>
+					<option value="height">height</option>
+					<option value="background">background</option>
+					<option value="display">display</option>
+				</select>
+				<input type="text" ref="otext" />
+				<input type="button" defaultValue="改变" onClick={this.handleClick} />
+				<div ref="box" className="box"></div>
+			</div>		
+		);
+	}
+});
+ReactDOM.render(
+	<Box />,
+	document.getElementById('example')
+);
+</script>
+</body>
+</html>

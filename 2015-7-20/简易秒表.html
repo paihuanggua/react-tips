@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="build/browser.min.js"></script>
+<style>
+</style>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/babel">
+//不知道怎52行用defaultValue 不显示数据
+var Box=React.createClass({
+	getInitialState:function(){
+		return{
+			time:'00:00',
+			count:0
+		};
+	},
+	toDou:function(num){
+		return num>9?''+num:'0'+num;
+	},
+	start:function(){
+		var count=this.state.count;
+		this.timer=setInterval(function(){
+			count++;
+			var time=this.state.time;
+			time=this.toDou(parseInt(count/60))+':'+this.toDou(parseInt(count%60));
+			this.setState({
+				time:time,
+				count:count
+			});
+		}.bind(this),1000);
+	},
+	pause:function(){
+		clearInterval(this.timer);
+	},
+	handleAlert:function(){
+		var oTime=this.refs.timeCon;
+		alert(oTime.value);
+	},
+	componentWillUnmount:function(){
+		clearInterval(this.timer);
+	},
+	render:function(){
+		return(
+			<div>
+				<input type="text" value={this.state.time} ref="timeCon" />
+				<input type="button" defaultValue="开始" ref="start" onClick={this.start} />
+				<input type="button" defaultValue="暂停" ref="pause" onClick={this.pause}/>
+				<input type="button" defaultValue="获取时间" onClick={this.handleAlert} />
+			</div>
+		);
+	}
+});
+ReactDOM.render(
+	<Box />,
+	document.getElementById('example')
+);
+</script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="build/browser.min.js"></script>
+<style>
+*{margin:0; padding:0;}
+body{background:#000; text-align:center; font-size:50px; color:#fff; font-weight:bold;}
+</style>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/babel">
+var Box=React.createClass({
+	toDou:function(num){
+		return num>9?''+num:'0'+num;
+	},
+	tick:function(){
+		var oDate = new Date();
+		var h = oDate.getHours();
+		var m = oDate.getMinutes();
+		var s = oDate.getSeconds();
+		var str = this.toDou(h)+this.toDou(m)+this.toDou(s);
+		for(var i=0;i<this.aImg.length;i++){
+			this.aImg[i].src='img/'+str.charAt(i)+'.png';
+		}
+	},
+	componentDidMount:function(){
+		this.oStage=this.refs.stage;
+		this.aImg=this.oStage.getElementsByTagName('img');
+		this.tick();
+		setInterval(this.tick,1000);
+	},
+	render:function(){
+		return(
+			<div ref="stage">
+				<img src="img/0.png" />
+				<img src="img/0.png" />
+				<span>:</span>
+				<img src="img/0.png" />
+				<img src="img/0.png" />
+				<span>:</span>
+				<img src="img/0.png" />
+				<img src="img/0.png" />
+			</div>
+		);
+	}
+});
+ReactDOM.render(
+	<Box />,
+	document.getElementById('example')
+);
+</script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="build/browser.min.js"></script>
+<style>
+*{margin:0; padding:0; list-style:none;}
+.box{width:500px; margin:100px auto; position:relative; top:0; left:0;}
+ul li{width:500px; overflow:hidden; display:none;}
+ul li img{width:100%;}
+.div1{overflow:hidden; width:150px; position:absolute; bottom:10px; left:50%; margin-left:-75px; }
+.div1 div{float:left; width:30px;height:30px; background:#ccc; border-radius:50%; text-align:center; line-height:30px; color:#fff;}
+.div1 div.on{ background:#f33;}
+</style>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/babel">
+var ImgFigure=React.createClass({
+	render:function(){
+		var styleObj={};
+		if(this.props.arrange.isBlock){
+			styleObj={
+				display:'block'
+			}
+		}
+		return(
+			<li style={styleObj}><img src={'img/'+this.props.arrange.url} /></li>
+		);
+	}
+});
+var ImgFigures=React.createClass({
+	render:function(){
+		var imgFiguresArr=[];
+		this.props.imageDatas.forEach(function(value,index){
+			imgFiguresArr.push(
+				<ImgFigure
+					key={index}
+					arrange={value}
+				/>
+			);
+		}.bind(this));
+		return(
+			<ul>{imgFiguresArr}</ul>
+		);
+	}
+});
+var ControllerUnit=React.createClass({
+	handleClick:function(){
+		this.props.UnitTurn();
+	},
+	render:function(){
+		var ControllerUnitClassName='';
+		if(this.props.arrange.isOn){
+			ControllerUnitClassName='on';
+		}
+		return(
+			<div className={ControllerUnitClassName}  onClick={this.handleClick}></div>
+		);
+	}
+});
+var ControllerUnits=React.createClass({
+	UnitTurn:function(index){
+		return function(){
+			var imageDatas=this.props.imageDatas;
+			for(var i=0;i<imageDatas.length;i++){
+				imageDatas[i].isOn=false,
+				imageDatas[i].isBlock=false;
+			}
+			imageDatas[index].isOn=true,
+			imageDatas[index].isBlock=true;
+			this.props.turn(imageDatas);
+		}.bind(this);
+	},
+	render:function(){
+		var ControllerUnitsArr=[];
+		this.props.imageDatas.forEach(function(value,index){
+			ControllerUnitsArr.push(
+				<ControllerUnit
+					key={index}
+					arrange={value}
+					UnitTurn={this.UnitTurn(index)}
+				/>
+			);
+		}.bind(this));
+		return(
+			<div className="div1">{ControllerUnitsArr}</div>
+		);
+	}
+});
+var Box=React.createClass({
+	getInitialState:function(){
+		return{
+			imageDatas:[
+				{
+					url:'0.jpg',
+					isOn:true,
+					isBlock:true
+				},
+				{
+					url:'1.jpg',
+					isOn:false,
+					isBlock:false
+				},
+				{
+					url:'2.jpg',
+					isOn:false,
+					isBlock:false
+				},
+				{
+					url:'3.jpg',
+					isOn:false,
+					isBlock:false
+				},
+				{
+					url:'4.jpg',
+					isOn:false,
+					isBlock:false
+				},
+			]
+		}
+	},
+	turn:function(stateArr){
+		this.setState({
+			imageDatas:stateArr
+		});		
+	},
+	render:function(){
+		return(
+			<div className="box">
+				<ImgFigures imageDatas={this.state.imageDatas} />
+				<ControllerUnits imageDatas={this.state.imageDatas} turn={this.turn} />
+			</div>
+		);
+	}
+});
+ReactDOM.render(
+	<Box />,
+	document.getElementById('example')
+);
+</script>
+</body>
+</html>

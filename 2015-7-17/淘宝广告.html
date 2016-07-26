@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="build/browser.min.js"></script>
+<style>
+*{margin:0; padding:0; list-style:none;}
+.box{width:500px; margin:100px auto; overflow:hidden;}
+.box ul,.box div{float:left;}
+.box ul{width:80px; }
+.box ul li{width:80px; height:30px; line-height:30px; text-align:center; background:#CCC; margin:5px 0;}
+.box ul li.on{background:#C90;}
+.box div{width:340px;}
+.box div img{width:100%;}
+.middle{position:relative; top:0; left:0;}
+.box .shadow{position:absolute; bottom:0px; left:0; width:330px; height:30px; line-height:30px; padding-left:10px; color:#fff; font-size:20px; font-weight:bold; background:rgba(0,0,0,0.3)};
+</style>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/babel">
+var Oli=React.createClass({
+	handleMouseOver:function(){
+		this.props.event();
+	},
+	render:function(){
+		var ControllerUnitClassName='';
+		if(this.props.data.isOn){
+			ControllerUnitClassName='on'
+		}
+		return(
+			<li className={ControllerUnitClassName} onMouseOver={this.handleMouseOver}>{this.props.data.con}</li>
+		);
+	}
+});
+var ControllerLeftBtn=React.createClass({
+	render:function(){
+		var aLi=[];
+		var mes=this.props.mes;
+		var leftSecNum=mes.length/2;
+		var leftSecArr=mes.slice(0,leftSecNum);
+		leftSecArr.forEach(function(value,index){
+			aLi.push(
+				<Oli
+					key={index}
+					data={value}
+					event={this.props.event(index)}
+				/>
+			);
+		}.bind(this));
+		return(
+			<ul>
+				{aLi}
+			</ul>
+		);
+	}
+});
+var ControllerRightBtn=React.createClass({
+	render:function(){
+		var aLi=[];
+		var mes=this.props.mes;
+		var rightSecNum=mes.length/2;
+		var rightSecArr=mes.slice(rightSecNum);
+		rightSecArr.forEach(function(value,index){
+			aLi.push(
+				<Oli
+					key={index}
+					data={value}
+					event={this.props.event(index+rightSecNum)}
+				/>
+			);
+		}.bind(this));
+		return(
+			<ul>
+				{aLi}
+			</ul>
+		);
+	}
+});
+var MesImg=React.createClass({
+	render:function(){
+		var mes=this.props.mes;
+		var con=[];
+		for(var i=0;i<mes.length;i++){
+			if(mes[i].isOn){
+				con.push(
+					mes[i].con,
+					mes[i].img
+				);
+			}
+		}
+		return(
+			<div className="middle">
+				<img src={'img/'+con[1]} />
+				<div className="shadow">{con[0]}</div>
+			</div>
+		);
+	}
+});
+var Box=React.createClass({
+	getInitialState:function(){
+		return{
+			mes:[
+				{
+					con:'皮鞋',
+					img:'0.jpg',
+					isOn:true
+				},
+				{
+					con:'运动鞋',
+					img:'1.jpg',
+					isOn:false
+				},
+				{
+					con:'凉鞋',
+					img:'2.jpg',
+					isOn:false
+				},
+				{
+					con:'拖鞋',
+					img:'3.jpg',
+					isOn:false
+				},
+				{
+					con:'棉鞋',
+					img:'4.jpg',
+					isOn:false
+				},
+				{
+					con:'靴子',
+					img:'5.jpg',
+					isOn:false
+				},
+				{
+					con:'马丁鞋',
+					img:'6.jpg',
+					isOn:false
+				},
+				{
+					con:'豆豆鞋',
+					img:'7.jpg',
+					isOn:false
+				},
+
+			]
+		}
+	},
+	changeImg:function(index){
+		return function(){
+			var mesArr=this.state.mes;
+			for(var i=0;i<mesArr.length;i++){
+				mesArr[i].isOn=false;
+			}
+			mesArr[index].isOn=true;
+			this.setState({
+				mes:mesArr
+			});
+		}.bind(this);
+	},
+	render:function(){
+		return(
+			<div className="box">
+				<ControllerLeftBtn mes={this.state.mes} event={this.changeImg} />
+				<MesImg mes={this.state.mes} />
+				<ControllerRightBtn mes={this.state.mes} event={this.changeImg} />
+			</div>
+		);
+	}
+});
+ReactDOM.render(
+	<Box />,
+	document.getElementById('example')
+);
+</script>
+</body>
+</html>

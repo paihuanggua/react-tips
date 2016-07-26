@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="build/browser.min.js"></script>
+<style>
+*{margin:0; padding:0; list-style:none;}
+ul li{float:left; width:50px; height:50px; border-radius:50%; background:red; margin-right:10px; text-align:center; line-height:50px; font-size:20px; font-weight:bold; color:#fff;}
+</style>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/babel">
+
+var Randomnum=React.createClass({
+	render:function(){
+		var aLi=[];
+		var styleObj={};
+		this.props.numArr.forEach(function(value,index){
+			if(index==this.props.numArr.length-1){
+				styleObj={
+					background:'blue'
+				};
+			}
+			aLi.push(
+				<li key={index} style={styleObj}>
+					{value}
+				</li>
+			);
+		}.bind(this));
+		return(
+			<ul>
+				{aLi}
+			</ul>
+		);
+	}
+});
+
+var Box=React.createClass({
+	toDou:function(iNum){
+		return iNum<10?'0'+iNum:''+iNum;
+	},
+	rnd:function(n,m){
+		return parseInt(n+Math.random()*(m-n));
+	},
+	findArr:function(arr,num){
+		for(var i=0;i<arr.length;i++){
+			if(arr[i]==num){
+				return true;
+			}
+		}
+		return false;
+	},
+	lottery:function(){
+		var arr=[];		
+		while(arr.length<6){
+			var num=this.toDou(this.rnd(1,34));
+			if(!this.findArr(arr,num)){
+				arr.push(num);
+			}
+		}
+		arr.sort();
+		arr.push(this.toDou(this.rnd(1,17)));
+		return arr;
+		
+	},
+	getInitialState:function(){
+		return{}
+	},
+	componentWillMount:function(){
+		//这里不能开定时器
+		var numArr=this.lottery();
+		this.setState({
+			numArr:numArr
+		})
+		
+	},
+	handleClick:function(){
+		this.timer=setInterval(function(){
+			var numArr=this.lottery();
+			this.setState({
+				numArr:numArr
+			})
+		}.bind(this),100)
+		setTimeout(function(){
+			clearInterval(this.timer);
+		}.bind(this),1000);
+	},
+	componentDidMount:function(){
+		this.timer=setInterval(function(){
+			var numArr=this.lottery();
+			this.setState({
+				numArr:numArr
+			})
+		}.bind(this),100)
+		setTimeout(function(){
+			clearInterval(this.timer);
+		}.bind(this),1000);
+	},
+	render:function(){
+		return(
+			<div>
+				<input type="button" defaultValue="随机来一注" onClick={this.handleClick} />
+				<Randomnum numArr={this.state.numArr} />
+			</div>
+		);
+	}
+});
+ReactDOM.render(
+	<Box />,
+	document.getElementById('example')
+);
+</script>
+</body>
+</html>

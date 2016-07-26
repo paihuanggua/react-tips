@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="build/browser.min.js"></script>
+<style>
+*{margin:0; padding:0;}
+div input{background:#ccc;}
+div input.on{background:red;}
+.box{width:200px; height:200px; background:#ccc; display: none;}
+</style>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/babel">
+//react 是不是这样写就好了，直接拿原声写，ref获取元素。
+//react主要是模块的重复使用，让我们在努力，写的再好看点
+var Box=React.createClass({
+	componentDidMount:function(){
+		var oStage=this.refs.stage;
+		var aBtn=oStage.getElementsByTagName('input');
+		var aDiv = oStage.getElementsByTagName('div');
+		//给所有按钮加自定义属性，加事件
+		for(var i=0;i<aBtn.length;i++){
+			aBtn[i].index=i;
+			aBtn[i].onclick=function(){
+				//先清除所有的样式
+				for(var i=0;i<aBtn.length;i++){
+					aBtn[i].className='';
+					aDiv[i].style.display='none';
+				}
+				//改变当前的样式
+				this.className='on';
+				aDiv[this.index].style.display='block';
+			};
+		}
+	},
+	render:function(){
+		return(
+			<div ref="stage">
+				<input type="button" value="aaa" className="on" />
+				<input type="button" value="bbb" />
+				<input type="button" value="ccc" />
+				<div className="box" style={{display:'block'}}>111</div>
+			    <div className="box">222</div>
+			    <div className="box">333</div>
+			</div>
+		);
+	}
+});
+ReactDOM.render(
+	<Box />,
+	document.getElementById('example')
+);
+</script>
+</body>
+</html>

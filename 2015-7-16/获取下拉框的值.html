@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="build/browser.min.js"></script>
+<style>
+</style>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/babel">
+var Obox=React.createClass({
+	handleClick:function(e){
+		e.stopPropagation();
+		e.preventDefault();
+		alert(this.refs.goodSelect.value);
+	},
+	render:function(){
+		return(
+			<div>
+				<select defaultValue="222" ref="goodSelect">
+					<option value="111">1111</option>
+					<option value="222">2222</option>
+					<option value="333">3333</option>
+				</select>
+				<input type="button" defaultValue="按钮" onClick={this.handleClick} />
+			</div>
+		);
+	}
+});
+ReactDOM.render(
+	<Obox />,
+	document.getElementById('example')
+);
+</script>
+</body>
+</html>

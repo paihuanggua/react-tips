@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="build/browser.min.js"></script>
+<style>
+</style>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/babel">
+var Box=React.createClass({
+	countDown:function(){
+		var count=this.state.count;
+		var freeBtn=this.refs.free_num;
+		freeBtn.disabled=true;
+		count--;
+		freeBtn.value='正在发送('+count+')';
+		if(count<0){
+			clearInterval(this.timer);
+			freeBtn.value='重新发送';
+			freeBtn.disabled=false;
+			count=6;
+		}
+		this.setState({
+			count:count
+		});
+		
+	},
+	getInitialState:function(){
+		return{
+			count:6
+		};
+	},
+	handleClick:function(e){
+		e.stopPropagation();
+		e.preventDefault();
+		this.countDown();
+		this.timer=setInterval(this.countDown,1000);
+	},
+	render:function(){
+		return(
+			<input type="button" ref="free_num" defaultValue="免费获取验证码" onClick={this.handleClick} />
+		);
+	}
+});
+ReactDOM.render(
+	<Box />,
+	document.getElementById('example')
+);
+</script>
+</body>
+</html>

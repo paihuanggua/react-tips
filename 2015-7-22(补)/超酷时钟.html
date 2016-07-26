@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="build/browser.min.js"></script>
+<style>
+* { padding: 0; margin: 0; }
+li { list-style: none; }
+body { background:#003; }
+img { border: none; }
+
+.date { width: 326px; height: 520px; margin: 50px auto 0; position: relative; }
+.date h2 { text-align: center; padding: 80px 0 30px; }
+.year { text-align: center; padding-top: 30px; overflow: hidden;}
+.year div{ float: left; }
+.time { text-align: center; padding: 30px 0; }
+.time div{ float: left;overflow: hidden; }
+.url { text-align: center; position: absolute; bottom: 40px; left: 160px; }
+.date img { position: relative; }
+.pos2 { margin-left: 10px; }
+.num { width: 25px; }
+.num2 { width: 38px; }
+</style>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/babel">
+var Year=React.createClass({
+	render:function(){
+		var Y=this.props.year+'';
+		var year=[];
+		for(var i=0;i<Y.length;i++){
+			year.push(
+				<img key={i} Name="num" src={'images/'+Y.charAt(i)+'.png'} alt="0" />
+			);
+		}
+		return(
+			<div>							
+				{year}
+				<img src="images/year.png" alt="year" />
+			</div>
+
+		);
+	}
+});
+var Month=React.createClass({
+	render:function(){
+		var M=this.props.mouth+'';
+		var mouth=[];
+		for(var i=0;i<M.length;i++){
+			mouth.push(
+				<img key={i} Name="num" src={'images/'+M.charAt(i)+'.png'} alt="0" />
+			);
+		}
+		return(
+			<div>
+				{mouth}
+			    <img src="images/month.png" alt="month" />
+			</div>
+		);
+	}
+});
+var Day=React.createClass({
+	render:function(){
+		var D=this.props.day+'';
+		var day=[];
+		for(var i=0;i<D.length;i++){
+			day.push(
+				<img key={i} Name="num" src={'images/'+D.charAt(i)+'.png'} alt="0" />
+			);
+		}
+		return(
+			<div>
+				{day}
+			    <img src="images/seven.png" alt="seven" />
+			</div>
+		)
+	}
+});
+var Hour=React.createClass({
+	render:function(){
+		var H=this.props.hour+'';
+		var hour=[];
+		for(var i=0;i<H.length;i++){
+			hour.push(
+				<img key={i} Name="num" src={'images/'+H.charAt(i)+'.png'} alt="0" />
+			);
+		}
+		return(
+			<div>
+				{hour}
+			    <img src="images/sign.png" alt="sign" />
+			</div>
+		);
+	}
+});
+var Minute=React.createClass({
+	render:function(){
+		var m=this.props.minute+'';
+		var minute=[];
+		for(var i=0;i<m.length;i++){
+			minute.push(
+				<img key={i} Name="num" src={'images/'+m.charAt(i)+'.png'} alt="0" />
+			);
+		}
+		return(
+			<div>
+				{minute}
+			    <img src="images/sign.png" alt="sign" />
+			</div>
+		);
+	}
+});
+var Second=React.createClass({
+	render:function(){
+		var s=this.props.second+'';
+		var second=[];
+		for(var i=0;i<s.length;i++){
+			second.push(
+				<img key={i} Name="num" src={'images/'+s.charAt(i)+'.png'} alt="0" />
+			);
+		}
+		return(
+			<div>
+				{second}
+			</div>
+		);
+	}
+});
+var Week=React.createClass({
+	render:function(){
+		var W=this.props.week;
+		var arr=[
+				'seven',
+				'one',
+				'two',
+				'three',
+				'four',
+				'five',
+				'six'
+			]
+		return(
+			<div>
+				<img className="pos2" src="images/week.png" alt="week" />
+			    <img className="num2" src={'images/'+arr[W]+'.png'} alt="one" />
+			</div>
+		);
+	}
+});
+var Box=React.createClass({
+	toDou:function(num){
+		return num>9?''+num:'0'+num;
+	},
+	getTime:function(){
+		var oDate = new Date();
+		var Y = oDate.getFullYear();
+		var M = this.toDou(oDate.getMonth()+1);
+		var D = this.toDou(oDate.getDate());
+		var h = this.toDou(oDate.getHours());
+		var m = this.toDou(oDate.getMinutes());
+		var s = this.toDou(oDate.getSeconds());
+		var W = oDate.getDay();
+		return[Y,M,D,h,m,s,W]
+	},
+	getInitialState:function(){
+		return{
+		}
+	},
+	componentWillMount:function(){
+		var dateArr=this.getTime();
+		this.setState({			
+			Y:dateArr[0],
+			M:dateArr[1],
+			D:dateArr[2],
+			h:dateArr[3],
+			m:dateArr[4],
+			s:dateArr[5],
+			W:dateArr[6],
+		});
+		
+	},
+	componentDidMount:function(){
+		this.timer=setInterval(function(){
+			var dateArr=this.getTime();
+			this.setState({
+				Y:dateArr[0],
+				M:dateArr[1],
+				D:dateArr[2],
+				h:dateArr[3],
+				m:dateArr[4],
+				s:dateArr[5],
+				W:dateArr[6],
+			});
+		}.bind(this),1000);
+	},
+	render:function(){
+		return(
+			<div className="date">
+				<h2><img src="images/title.png" alt="" /></h2>
+				<div className="year">
+					<Year year={this.state.Y} />
+			        <Month mouth={this.state.M} />
+			        <Day day={this.state.D} />
+			    </div>
+				<div className="time">
+					<Hour hour={this.state.h} />
+					<Minute minute={this.state.m} />
+			        <Second second={this.state.s} />
+			        <Week week={this.state.W} />
+			    </div>
+			</div>
+		);
+	}
+});
+ReactDOM.render(
+	<Box />,
+	document.getElementById('example')
+);
+</script>
+</body>
+</html>

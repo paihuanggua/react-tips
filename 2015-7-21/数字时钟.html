@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="build/browser.min.js"></script>
+<style>
+*{margin:0; padding:0;}
+body{ text-align:center; font-size:50px; font-weight:bold; color:#fff; background:#000;}
+</style>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/babel">
+//我觉得react用js原声面向对象形式写，更能让人理解
+//把元素挂在在this上
+var Box=React.createClass({
+	toDou:function(num){
+		return num>9?''+num:'0'+num;
+	},
+	tick:function(){
+		var oDate=new Date();
+		var Y = oDate.getFullYear();
+		var M = oDate.getMonth()+1;
+		var D = oDate.getDate();
+		var W = oDate.getDay();
+		var h = oDate.getHours();
+		var m = oDate.getMinutes();
+		var s = oDate.getSeconds();
+		this.oTime_box.innerHTML=this.toDou(h)+':'+this.toDou(m)+':'+this.toDou(s);
+		this.oDate_box.innerHTML=Y+'-'+this.toDou(M)+'-'+this.toDou(D);
+		this.oWeek_box.innerHTML='星期'+W;
+	},
+	componentDidMount:function(){
+		this.oTime_box=this.refs.time;
+		this.oDate_box=this.refs.date;
+		this.oWeek_box=this.refs.week;
+		this.tick();
+		//setInterval(this.tick,1000);
+		setInterval(function(){
+			this.tick();
+		}.bind(this),1000);
+	},
+	render:function(){
+		return(
+			<div>
+				<div ref="time">00:00:00</div>
+				<div ref="date">0000-00-00</div>
+				<div ref="week">星期</div>
+			</div>
+		);
+	}
+});
+ReactDOM.render(
+	<Box />,
+	document.getElementById('example')
+);
+</script>
+</body>
+</html>

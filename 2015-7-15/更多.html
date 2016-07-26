@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="build/browser.min.js"></script>
+<style>
+.more_box{width:80px; height:30px; line-height:30px; text-align:center; background:#ccc;border:1px solid #000;}
+.box{width:200px; height:200px; background:red; display:none;}
+</style>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/babel">
+var Box=React.createClass({
+	toShow:function(e){
+		e.stopPropagation();
+		e.preventDefault();
+		this.refs.box.style.display='block';
+	},
+	toHide:function(e){
+		e.stopPropagation();
+		e.preventDefault();
+		this.refs.box.style.display='none';
+	},
+	render:function(){
+		return(
+			<div className="more_box" onMouseOver={this.toShow} onMouseOut={this.toHide}>
+				更多
+				<div className="box" ref="box"></div>
+			</div>
+		)
+	}
+});
+ReactDOM.render(
+	<Box />,
+	document.getElementById('example')
+);
+</script>
+</body>
+</html>

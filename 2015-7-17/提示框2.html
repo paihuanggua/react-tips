@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="build/browser.min.js"></script>
+<style>
+* { padding: 0; margin: 0; }
+li { list-style: none; }
+body { background: #eaeae4; }
+.prompt { width: 330px; height: 261px; background: url(images/1.jpg); margin: 50px auto 0; position: relative; }
+.prompt2 { width: 330px; height: 261px; background: url(images/2.jpg); margin: 50px auto 0; position: relative; }
+.prompt ul { position: absolute; top: 220px; }
+.prompt .list1 { left: 15px; }
+.prompt li { float: left; width: 100px; height: 30px; line-height: 30px; text-align: center; margin-right: 1px; background: url(images/li_bg.gif) repeat-x; position: relative; cursor: pointer; }
+.prompt h2 { color: #fff; font-size: 14px; }
+.prompt div { width: 128px; height: 100px; padding: 10px; background: url(images/p_bg.gif) no-repeat; filter: alpha(opacity=80); opacity: 0.8; position: absolute; bottom: 28px; left: -24px; display: none; color: #fff; font-size: 12px; text-align: left; line-height: 16px; font-family: arial; }
+.prompt .active { background: url(images/active.gif) no-repeat; font-weight: bold; }
+</style>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/babel">
+var Oli=React.createClass({
+	render:function(){
+		var value=this.props.onedata;
+		var aP=[];
+		if(value.con){
+			value.con.forEach(function(con,index){
+				aP.push(
+					<p key={index}>{con}</p>
+				);
+			});
+			return(
+				<li>
+					<h2>{value.title}</h2>
+	            	<div>
+						{aP}
+	            	</div>
+				</li>
+			);
+		}else{
+			return(
+				<li>
+					<h2>{value.title}</h2>
+	            </li>
+			);
+		}
+	}
+});
+var LiModule=React.createClass({
+	render:function(){
+		var aLi=[];
+		this.props.data.forEach(function(value,index){
+			aLi.push(
+				<Oli 
+					key={index}
+					onedata={value}
+				/>
+			);
+		});
+		return(
+			<ul className="list1">
+				{aLi}
+			</ul>
+		);
+	}
+});
+var FirstBox=React.createClass({
+	render:function(){
+		var oClassName=this.props.name;
+		return(
+			<div className={oClassName}>
+				<LiModule data={this.props.data} />
+			</div>
+		);
+	}	
+});
+var Box=React.createClass({
+	getInitialState:function(){
+		return{
+			mesArr:[
+				{
+					title:'产品'
+				},
+				{
+					title:'经销商',
+					con:[
+						'鼎好电子大厦A座9019室',
+						'联系电话：010-62607039 13501246332'
+					]
+				},
+				{
+					title:'价格',
+					con:[
+						'NX5',
+						'参考价：890元'
+					]
+				}
+			],
+			mesArr2:[
+				{
+					title:'产品222',
+					con:[
+						'手机',
+						'手机222',
+					]
+				},
+				{
+					title:'经销商222',
+					con:[
+						'222',
+						'2222',
+						'NX5',
+						'参考价：890元'
+					]
+				},
+				{
+					title:'价格222',
+					con:[
+						'222',
+						'222222222',
+						'NX5',
+						'参考价：10000元'
+					]
+				}
+			]
+		}
+	},
+	componentDidMount:function(){
+		var box = this.refs.box;
+		var aLi = box.getElementsByTagName('li');
+		for(var i=0;i<aLi.length;i++){
+			aLi[i].onmouseover=function(){
+				var oDiv = this.getElementsByTagName('div')[0];
+				if(oDiv){
+					oDiv.style.display='block';
+				}
+			};
+			aLi[i].onmouseout=function(){
+				var oDiv = this.getElementsByTagName('div')[0];
+				if(oDiv){
+					oDiv.style.display='none';
+				}
+			};
+		}
+		
+	},
+	render:function(){
+		return(
+			<div ref="box">
+				<FirstBox data={this.state.mesArr} name="prompt" />
+				<FirstBox data={this.state.mesArr2} name="prompt prompt2" />
+			</div>
+		);
+	}
+});
+ReactDOM.render(
+	<Box />,
+	document.getElementById('example')
+);
+</script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="build/browser.min.js"></script>
+<style>
+* { padding: 0; margin: 0; }
+li { list-style: none; }
+body { background: #f6f9fc; font-family: arial; }
+
+.calendar { width: 210px; margin: 50px auto 0; padding: 10px 10px 20px 20px; background: #eae9e9; }
+.calendar ul { width: 210px; overflow: hidden; padding-bottom: 10px; }
+.calendar li { float: left; width: 58px; height: 54px; margin: 10px 10px 0 0; border: 1px solid #fff; background: #424242; color: #fff; text-align: center; cursor: pointer; }
+.calendar li h2 { font-size: 20px; padding-top: 5px; }
+.calendar li p { font-size: 14px; }
+
+.calendar .active { border: 1px solid #424242; background: #fff; color: #e84a7e; }
+.calendar .active h2 { }
+.calendar .active p { font-weight: bold; }
+
+.calendar .text { width: 178px; padding: 0 10px 10px; border: 1px solid #fff; padding-top: 10px; background: #f1f1f1; color: #555; }
+.calendar .text h2 {font-size: 14px; margin-bottom: 10px; }
+.calendar .text p { font-size: 12px; line-height: 18px; }
+</style>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/babel">
+var Oli=React.createClass({
+	handleMouseOver:function(){
+		this.props.event();
+	},
+	render:function(){
+		var	 controlelrUnitClassName='';
+		if(this.props.data.isOn){
+			controlelrUnitClassName='active';
+		}
+		return(
+			<li className={controlelrUnitClassName} onMouseOver={this.handleMouseOver}>
+				<h2>{this.props.num}</h2>
+				<p>{this.props.data.month}</p>
+			</li>
+		);
+	}
+});
+var Oul=React.createClass({
+	render:function(){
+		var aLi=[];
+		var arr=this.props.arr;
+		arr.forEach(function(value,index){
+			aLi.push(
+				<Oli 
+					key={index} 
+					data={value}
+					event={this.props.event(index)} 
+					num={index+1} 
+				/>
+			);
+		}.bind(this));
+		return(
+			<ul>
+				{aLi}
+			</ul>
+		);
+	}
+});
+var Odiv=React.createClass({
+	render:function(){
+		var Mes=[];
+		var arr=this.props.arr;
+		for(var i=0;i<arr.length;i++){
+			if(arr[i].isOn){
+				Mes.push(
+					i+1,
+					arr[i].con
+				);
+			}
+		}
+		return(
+			<div className="text">
+				<h2>{Mes[0]}月活动</h2>
+        		<p>{Mes[1]}</p>
+			</div>
+		);
+	}
+});
+var Box=React.createClass({
+	getInitialState:function(){
+		return{
+			arr:[
+					{						
+						month:'JAN',
+						con:'元旦，放假',
+						isOn:true
+					},
+					{						
+						month:'FER',
+						con:'春节，放假',
+						isOn:false
+					},
+					{						
+						month:'MAR',
+						con:'3.15打假，公司放假',
+						isOn:false
+					},
+					{						
+						month:'APR',
+						con:'清明节，放假',
+						isOn:false
+					},
+					{						
+						month:'MAY',
+						con:'五一，放假',
+						isOn:false
+					},
+					{						
+						month:'JUN',
+						con:'儿童节，放假',
+						isOn:false
+					},
+					{						
+						month:'JUL',
+						con:'建党节，放假',
+						isOn:false
+					},
+					{						
+						month:'AUG',
+						con:'建军节，放假',
+						isOn:false
+					},
+					{						
+						month:'SEP',
+						con:'抗战成功，放假',
+						isOn:false
+					},
+					{						
+						month:'OCT',
+						con:'十一，放假',
+						isOn:false
+					},
+					{						
+						month:'NOV',
+						con:'双十一，剁手',
+						isOn:false
+					},
+					{						
+						month:'DEC',
+						con:'双十二，继续剁手',
+						isOn:false
+					}
+			]
+		}
+	},
+	handleMouse:function(index){
+		return function(){
+			var elementArr=this.state.arr;
+			for(var i=0;i<elementArr.length;i++){
+				elementArr[i].isOn=false;
+			}
+			elementArr[index].isOn=true;
+			this.setState({
+				elementArr:elementArr
+			});
+		}.bind(this);
+	},
+	render:function(){
+		console.log('qqq');
+		return(
+			<div ref="tab" className="calendar">
+				<Oul arr={this.state.arr} event={this.handleMouse} />
+				<Odiv arr={this.state.arr} />
+			</div>
+		);
+	}
+});
+ReactDOM.render(
+	<Box />,
+	document.getElementById('example')
+);
+</script>
+</body>
+</html>
